@@ -37,8 +37,8 @@ qqnorm(d_lin$OXIGENO_lineal)
 qqline(d_lin$OXIGENO_lineal)
 
 'En general, los datos atípicos no deben eliminarse de forma automática, sino que debemos
-realizar el análisis con y sin dichos datos para evaluar su efecto sobre el modelo, si se trata verdaderamente
-de observaciones influyentes o no'
+ realizar el análisis con y sin dichos datos para evaluar su efecto sobre el modelo, 
+ si se trata verdaderamente de observaciones influyentes o no'
 
 d_lin <- d_lin[-33, ]
 boxplot(d_lin$OXIGENO_lineal)
@@ -79,7 +79,7 @@ modelo_backward$coefficients
 
 #Ajuste usando solo la cte
 modelo_cte <- lm(OXIGENO_lineal ~ 1 , data = d_lin)
-#Forward Regression
+
 modelo_forward <- step(modelo_cte, direction = "forward",
                        scope = formula(modelo_completo))
 modelo_forward$coefficients   # mismo modelo que se obtuvo con backward
