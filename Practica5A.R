@@ -41,9 +41,9 @@ realizar el análisis con y sin dichos datos para evaluar su efecto sobre el mod
 de observaciones influyentes o no'
 
 d_lin <- d_lin[-33, ]
-boxplot(d2_lin$OXIGENO_lineal)
+boxplot(d_lin$OXIGENO_lineal)
 
-shapiro.test(d2_lin$OXIGENO_lineal) # p-valor = 0.3628 < 0.05, sigue sin tener normalidad
+shapiro.test(d_lin$OXIGENO_lineal) # p-valor = 0.3628 < 0.05, sigue sin tener normalidad
 qqnorm(d_lin$OXIGENO_lineal)
 qqline(d_lin$OXIGENO_lineal)
 
@@ -217,7 +217,7 @@ summary(modelo_final_1) # OK
 # Modelo con predictores elevados a potencias
 # modelo_polinomial <- lm(OXIGENO_lineal ~ I(COD^3) + COD + pol(TVS,3), data = d_lin)
 # La función pol() no funciona porque no tenemos la librería rms
-modelo_polinomial <- lm(OXIGENO_lineal ~ I(COD^3) + COD + poly(TVS,3), data = d_lin)
+modelo_polinomial <- lm(OXIGENO_lineal ~ I(COD^3) + COD + poly(TVS,3, raw = TRUE), data = d_lin)
 summary(modelo_polinomial)
 
 
@@ -229,7 +229,7 @@ summary(modelo_interaccion)
 'Obsérvese que la introducción de varias potencias de un mismo regresor
  puede dar lugar a problemas de multicolinealidad.'
 vif(modelo_polinomial)
-vif(modelo_interaccion)
+'Sale distinto porque no he usado pol(), he usado poly(), da mal igualmente'
 
 
 
