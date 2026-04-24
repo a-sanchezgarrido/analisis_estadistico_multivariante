@@ -66,6 +66,8 @@ summary(modelo_final_1)
 # library("rms")  NO FUNCIONA
 library("car")
 vif(modelo_final_1) # A bien, pero B y D tienen colinealidad
+'También lo puedo mirar como vif(modelo_forward)'
+
 'Para eliminarla hay que eliminar B o D'
 summary(modelo_final_1)
 
@@ -80,7 +82,7 @@ vif(modelo_final_2) # Ahora sí ambos cerca de 1, genial
 
 'La primera propuesta sería el modelo_final_2 y la otra opción sería la análoga,
  en vez de las variables A y B coger C y D'
-modelo_final_3 <- lm(HEAT ~ B + C, data = d)
+modelo_final_3 <- lm(HEAT ~ B + C, data = d)  # Creo que es mejor no tocar las de C
 summary(modelo_final_3)
 vif(modelo_final_3)
 # Como podemos ver no hay colinealidad luego también es válido ese modelo
@@ -139,6 +141,7 @@ vif(modelo_final_2) # Ambos cerca de 1
 
 # Distancia de Cook OK
 cook <- cooks.distance(modelo_final_2)
+cook
 plot(cook)  # Todos debajo de 1, no hay observaciones influyentes
 
 'Se cumplen todas las hipótesis con éxito'
