@@ -200,7 +200,7 @@ ts.plot(logit$residuals)
 'OK'
 
 # Multicolinealidad
-library(car)
+library("car")
 vif(logit)
 'OK. Todos cerca de 1, hay que mirar el GVIF'
 
