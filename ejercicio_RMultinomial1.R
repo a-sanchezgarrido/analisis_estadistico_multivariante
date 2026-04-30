@@ -46,6 +46,7 @@ View(d_test)
  ¿Qué probs hay de que sea Versicolor/Virginica en vez de Setosa?'
 
 library("nnet")
+d_entrenamiento$Species <- relevel(d_entrenamiento$Species, ref = "setosa")
 mymultinom <- multinom(Species ~ ., data = d_entrenamiento)
 summary(mymultinom)
 'Coefficients:
@@ -65,7 +66,7 @@ summary(mymultinom)
 
 modelo_backward <- step(mymultinom, direction = "backward")
 
-modelo_nulo <- multinom(Species ~ 1, data = d)
+modelo_nulo <- multinom(Species ~ 1, data = d_entrenamiento)
 modelo_forward <- step(modelo_nulo, scope = formula(mymultinom),
                        direction = "forward")
 
@@ -78,21 +79,20 @@ summary(modelo_backward)
  El modelo es irreducible'
 
 summary(modelo_forward)
-'                Df      AIC
- <none>           8 29.26653
- + +Sepal.Length 10 31.89973
- El forward nos dice que si es reducible, se queda con todas menos Sepal.Length'
+'Step:  AIC=21.22
+ Species ~ Petal.Width + Petal.Length + Sepal.Length + Sepal.Width
+ Coge todos, es irreducible.'
 
 summary(modelo_stepwise)
-'                Df      AIC
- <none>           8 29.26653
- + +Sepal.Length 10 31.89973
- - Sepal.Width    6 32.57901
- - Petal.Length   6 39.39931
- - Petal.Width    6 43.51576
- El stepwise nos dice de nuevo que es reducible, se queda todas menos Sepal.Length'
+'               Df      AIC
+ <none>         10 21.21883
+ - Sepal.Width   8 24.79663
+ - Sepal.Length  8 25.19300
+ - Petal.Width   8 28.73232
+ - Petal.Length  8 33.90678
+ De nuevo, irreducible.'
 
-'Como el AIC del modelo_backward es el más bajo (21.21883), nos quedamos con él:
+'Como el AIC de tddos los modelos es el mismo nos quedamos con todas las variables.
  Todas las variables son nuestro modelo, tomamos el modelo completo.'
 
 # --------------------------------------------
@@ -105,15 +105,16 @@ mymultinom$deviance #Valor de la devianza: 1.218832
 
 'Significación del modelo comparando devianza del modelo completo frente al nulo'
 diferencia_devianzas <- modelo_nulo$deviance - mymultinom$deviance
-n = nrow(d)
-c = nlevels(d$Species)
+n = nrow(d_entrenamiento)
+c = nlevels(d_entrenamiento$Species)
 l = length(mymultinom$coefnames)
 df_nulo = n - 1*(c-1)
 df_mymultinom = n- l*(c-1)
 grados_libertad <- df_nulo - df_mymultinom
 p_valor <- pchisq(diferencia_devianzas, df = grados_libertad, lower.tail = FALSE)
 p_valor
-# el p-valor (3.734788e-66 < 0.05) permite concluir que el modelo completo es significativo.
+# el p-valor (4.625e-45 < 0.05) permite concluir que el modelo completo es significativo.
+
 
 'La signficación individual de cada predictor se obtiene con el test de Wald y el estadístico Z.'
 valores_z <- summary(mymultinom)$coefficients/summary(mymultinom)$standard.errors

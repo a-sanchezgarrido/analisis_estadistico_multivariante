@@ -50,6 +50,7 @@ d$fbs <- factor(d$fbs)
 d$restecg <- factor(d$restecg)
 d$exang <- factor(d$exang)
 d$slope <- factor(d$slope)
+d$ca <- factor((d$ca))
 d$tal <- factor(d$tal)
 d$disease <- factor(d$disease)
 summary(d)
@@ -161,6 +162,7 @@ roc(d_test$disease, pred_test, plot = TRUE,
 '9) Repetir el análisis (apartado 5 y siguientes) pero aplicando primero los métodos
  de selección de regresores, con el fin de proponer un modelo más parsimonioso.'
 
+logit$aic
 modelo_backward <- step(logit, direction = "backward")   # Modelo no reducible
 'disease ~ sex + cp + trestbps + fbs + thalach + exang + oldpeak + 
     ca + tal
@@ -176,7 +178,7 @@ modelo_backward <- step(logit, direction = "backward")   # Modelo no reducible
 - oldpeak   1   138.46 162.46
 - cp        3   145.50 165.50'
 
-modelo_nulo <- glm(disease ~ 1, data = d, family = "binomial")
+modelo_nulo <- glm(disease ~ 1, data = d_entrenamiento, family = "binomial")
 modelo_forward <- step(modelo_nulo, scope = formula(logit), direction = "forward")
 'disease ~ tal + ca + cp + oldpeak + slope + sex + trestbps + 
     exang + thalach
